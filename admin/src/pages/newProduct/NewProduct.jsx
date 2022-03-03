@@ -10,6 +10,7 @@ import app from "../../firebase";
 import { addProduct } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function NewProduct() {
   const [inputs, setInputs] = useState({});
@@ -18,6 +19,9 @@ export default function NewProduct() {
   const [clr, setClr] = useState([]);
   const [sz, setSz] = useState([]);
   const dispatch = useDispatch();
+  const { scc, error } = useSelector((state) => state.product);
+  const [err, setError] = useState(error);
+  const [sc, setSuccess] = useState(scc);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -25,7 +29,7 @@ export default function NewProduct() {
     });
   };
   const handleCat = (e) => {
-    setCat(e.target.value.split(","));
+    setCat(e.target.value)
   };
   const handleClr = (e) => {
     setClr(e.target.value.split(","));
@@ -35,37 +39,41 @@ export default function NewProduct() {
   };
 
   const handleClick = (e) => {
-    const fileName = new Date().getTime() + file.name;
-    const storage = getStorage(app);
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload Halted");
-            break;
-          case "running":
-            console.log("Upload In Progress");
-            break;
-          default:
+    if (file === null) {
+      setError(true)
+    } else {
+      setSuccess(true)
+      const fileName = new Date().getTime() + file.name;
+      const storage = getStorage(app);
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+  
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload Halted");
+              break;
+            case "running":
+              console.log("Upload In Progress");
+              break;
+            default:
+          }
+        },
+        (error) => {
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            const product = { ...inputs, img: downloadURL, categories: cat, size: sz, color: clr };
+            addProduct(product, dispatch);
+          });
         }
-      },
-      (error) => {
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const product = { ...inputs, img: downloadURL, categories: cat, size: sz, color: clr };
-          addProduct(product, dispatch);
-        });
-      }
-    );
+      );
+    }
   };
 
   return (
@@ -114,7 +122,15 @@ export default function NewProduct() {
         </div>
         <div className="addProductItem">
           <label>Categories</label>
-          <input type="text" placeholder="Product Category" onChange={handleCat} required />
+            <select name="category" style={{color:"grey"}} onChange={handleCat} required >
+              <option selected disabled>Pick Category</option>
+              <option value="Valentine's Collection Men">Valentine's Collection Men</option>
+              <option value="Valentine's Collection Women">Valentine's Collection Women</option>
+              <option value="Light Jackets">Light Jackets</option>
+              <option value="T-shirts">T-shirts</option>
+              <option value="Dresses">Dresses</option>
+              <option value="Denim Jeans">Denim Jeans</option>
+            </select>
         </div>
         <div className="addProductItem">
           <label>Color</label>
@@ -126,16 +142,29 @@ export default function NewProduct() {
         </div>
         <div className="addProductItem">
           <label>Stock</label>
-          <select name="inStock" onChange={handleChange} required>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
+          <select name="inStock" style={{color:"grey"}} onChange={handleChange} required>
+            <option selected disabled>Set Status</option>
+            <option value="true">In Stock</option>
+            <option value="false">Out Of Stock</option>
           </select>
         </div>
-        <Link to="/products">
+        {err ?
+        <>
+        <button onClick={handleClick} className="addProductButton"> Add Product </button>
+        <span style={{marginLeft:"10px"}}>Empty Fields !</span>
+        </>
+        : sc ?
+        <>
         <button onClick={handleClick} className="addProductButton">
           Add Product 
         </button>
-        </Link>
+        <span style={{marginLeft:"10px"}}>Product Added Successfully</span>
+        </>
+        :
+        <button onClick={handleClick} className="addProductButton">
+          Add Product 
+        </button>
+        }
       </form>
       </div>
   );

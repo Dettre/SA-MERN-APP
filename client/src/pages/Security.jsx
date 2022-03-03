@@ -56,14 +56,22 @@ const Security = () => {
     const eml = useSelector((state) => state.user.currentUser.email);
     const id = useSelector((state) => state.user.currentUser._id) ;
     const dispatch = useDispatch();
-
+    const [err, setErr] = useState(false)
+    const [err2, setErr2] = useState(false)
+    const [err3, setErr3] = useState(false)
     const handleClick = (type) => {
         if (type === "username") {
-          updateCredentials(dispatch,  id, type, username );
+          if (username === "") {
+            setErr(true)
+          } else { updateCredentials(dispatch,  id, type, username ); }
         } else if (type === "email") {
-          updateCredentials(dispatch,  id, type, usr, email );
+          if (email === "") {
+            setErr2(true)
+          } else { updateCredentials(dispatch,  id, type, usr, email ); }
         } else if (type === "password") {
-          updateCredentials(dispatch,  id, type, usr, eml, password );
+          if (password === "") {
+            setErr3(true)
+          } else { updateCredentials(dispatch,  id, type, usr, eml, password ); }
         }
     };
 
@@ -74,17 +82,20 @@ const Security = () => {
         <Form>
           <Title>Account Settings</Title>
           <Duo>
-            <Input placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
+            <Input placeholder={usr} onChange={(e) => setUsername(e.target.value)}/>
             <Button onClick={() => handleClick("username")}>Change Username</Button>
           </Duo>
+          {err ? <span style={{marginTop:"10px", color:"red"}}>Empty Username !</span> : <></>}
           <Duo>
-            <Input placeholder="E-Mail" onChange={(e) => setEmail(e.target.value)}/>
+            <Input placeholder={eml} onChange={(e) => setEmail(e.target.value)}/>
             <Button onClick={() => handleClick("email")}>Change E-Mail</Button>
           </Duo>
+          {err2 ? <span style={{marginTop:"10px", color:"red"}}>Empty E-Mail !</span> : <></>}
           <Duo>
-            <Input placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+            <Input placeholder="New Password" onChange={(e) => setPassword(e.target.value)}/>
             <Button onClick={() => handleClick("password")}>Change Password</Button>
           </Duo>
+          {err3 ? <span style={{marginTop:"10px", color:"red"}}>Empty Password !</span> : <></>}
         </Form>
     </div>
   );

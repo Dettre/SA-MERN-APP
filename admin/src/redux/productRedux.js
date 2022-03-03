@@ -6,6 +6,7 @@ export const productSlice = createSlice({
     products: [],
     isFetching: false,
     error: false,
+    scc: false,
   },
   reducers: {
     getProductStart: (state) => {
@@ -59,52 +60,19 @@ export const productSlice = createSlice({
 
     updateProductSuccess: (state, action) => {
       state.isFetching = false;
+      state.scc = true;
       const prdIndex = state.products.findIndex((product) => product._id === action.payload.id)
       state.products[prdIndex].title = action.payload.name
-    },
-    updateProductSuccess2: (state, action) => {
-      state.isFetching = false;
-      const prdIndex = state.products.findIndex((product) => product._id === action.payload.id)
       state.products[prdIndex].desc = action.payload.desc
-    },
-    updateProductSuccess3: (state, action) => {
-      state.isFetching = false;
-      const prdIndex = state.products.findIndex((product) => product._id === action.payload.id)
       state.products[prdIndex].price = parseInt(action.payload.price, 10);
-      
-    },
-    updateProductSuccess4: (state, action) => {
-      state.isFetching = false;
-      const prdIndex = state.products.findIndex((product) => product._id === action.payload.id)
       state.products[prdIndex].categories = []
       state.products[prdIndex].categories.push(action.payload.category)
-    },
-    updateProductSuccess5: (state, action) => {
-      state.isFetching = false;
-      const prdIndex = state.products.findIndex((product) => product._id === action.payload.id)
       state.products[prdIndex].color = [] 
       state.products[prdIndex].color.push(action.payload.color)
-    },
-    updateProductSuccess6: (state, action) => {
-      state.isFetching = false;
-      const prdIndex = state.products.findIndex((product) => product._id === action.payload.id)
       state.products[prdIndex].size = [] 
       state.products[prdIndex].size.push(action.payload.size)
-    },
-    updateProductSuccess7: (state, action) => {
-      state.isFetching = false;
-      const prdIndex = state.products.findIndex((product) => product._id === action.payload.id)
       state.products[prdIndex].inStock = action.payload.stt
-
     },
-
-
-
-    
-
-
-
-
 
     updateProductFailure: (state) => {
       state.isFetching = false;
@@ -135,12 +103,6 @@ export const {
   deleteProductFailure,
   updateProductStart,
   updateProductSuccess,
-  updateProductSuccess2,
-  updateProductSuccess3,
-  updateProductSuccess4,
-  updateProductSuccess5,
-  updateProductSuccess6,
-  updateProductSuccess7,
   updateProductSuccess8,
   updateProductFailure,
   addProductStart,

@@ -48,6 +48,7 @@ export default function Product() {
   const prdcategory = produc.categories;
   const prdcolor = produc.color;
   const prdsize = produc.size;
+  const prdtt = produc.inStock;
   
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -57,27 +58,54 @@ export default function Product() {
   const [size, setSize] = useState([]);
   const [status, setStatus] = useState('');
 
-  const handleClick = (type) => {
-    if (type === "name") {
-      updatePrd(dispatch,  productId, type, name );
-    } else if (type === "desc") {
-      updatePrd(dispatch,  productId, type, prdname, desc  );
-    } else if (type === "price") {
-      updatePrd(dispatch,  productId, type, prdname, prddesc, price );
-    } else if (type === "category") {
-      updatePrd(dispatch,  productId, type, prdname, prddesc, prdprice, category );
-    } else if (type === "color") {
-      updatePrd(dispatch,  productId, type, prdname, prddesc, prdprice, prdcategory, color );
-    } else if (type === "size") {
-      updatePrd(dispatch,  productId, type, prdname, prddesc, prdprice, prdcategory, prdcolor, size );
-    } else if (type === "status") {
-      updatePrd(dispatch,  productId, type, prdname, prddesc, prdprice, prdcategory, prdcolor, prdsize, status );
-    }
-};
+  const handleClick = () => {
+
+    let nm = ""
+    if (name === "") {
+      nm = prdname
+    } else { nm = name }
+
+    let dsc = ""
+    if (desc === "") {
+      dsc = prddesc
+    } else { dsc = desc }
+
+    let pr = 0
+    if (price === 0) {
+      pr = prdprice
+    } else { pr = price }
+
+    let ct = []
+    if (category === []) {
+      ct = prdcategory
+    } else { ct = category }
+
+    let cl = []
+    if (color === []) {
+      cl = prdcolor
+    } else { cl = color }
+
+    let sz = []
+    if (size === []) {
+      sz = prdsize
+    } else { sz = size }
+
+    let st = ""
+    if (status === "") {
+      st = prdtt
+    } else { st = status }
+    
+    updatePrd(dispatch,  productId, nm, dsc, pr, ct, cl, sz, st );
+  };
+
 const handleChange = (e) => {
   setStatus((prev) => {
     return { ...prev, [e.target.name]: e.target.value };
   });
+};
+
+const handleChange2 = (e) => {
+  setCategory(e.target.value)
 };
 
   return (
@@ -93,36 +121,38 @@ const handleChange = (e) => {
             </div>  
             <Duo>
             <Input type="text" placeholder={produc.title} name="title" type="text" onChange={(e) => setName(e.target.value)}/>
-            <Button onClick={() => handleClick("name")} >Change Name</Button>
             </Duo>
             <Duo>
             <Input type="text" placeholder={produc.desc} name="desc" type="text" onChange={(e) => setDesc(e.target.value)}/>
-            <Button onClick={() => handleClick("desc")}>Change Description</Button>
             </Duo>
             <Duo>
             <Input type="text" placeholder={produc.price} name="price" type="number" onChange={(e) => setPrice(e.target.value)} />
-            <Button onClick={() => handleClick("price")}>Change Price</Button>
             </Duo>
             <Duo>
-            <Input type="text" placeholder={produc.categories} type="text" onChange={(e) => setCategory(e.target.value)}/>
-            <Button onClick={() => handleClick("category")}>Change Category</Button>
+            <select name="category" id="category" style={{border:"transparent", width:"100%", outline:"none", color:"gray", fontSize:"16px"}}  onChange={handleChange2} >
+              <option selected disabled>Pick Category</option>
+              <option value="Valentine's Collection Men">Valentine's Collection Men</option>
+              <option value="Valentine's Collection Women">Valentine's Collection Women</option>
+              <option value="Light Jackets">Light Jackets</option>
+              <option value="T-shirts">T-shirts</option>
+              <option value="Dresses">Dresses</option>
+              <option value="Denim Jeans">Denim Jeans</option>
+            </select>
             </Duo>
             <Duo>
             <Input type="text" placeholder={produc.color} type="text"  onChange={(e) => setColor(e.target.value)} />
-            <Button onClick={() => handleClick("color")}>Change Color</Button>
             </Duo>
             <Duo>
             <Input type="text" placeholder={produc.size} type="text" onChange={(e) => setSize(e.target.value)} />
-            <Button onClick={() => handleClick("size")}>Change Size</Button>
             </Duo>
             <Duo>
             <select name="inStock" id="idStock" style={{border:"transparent", width:"100%", outline:"none", color:"gray", fontSize:"16px"}}  onChange={handleChange} >
-              <option selected disabled>Pick Option</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
+              <option selected disabled>Set Status</option>
+              <option value="true">In Stock</option>
+              <option value="false">Out Of Stock</option>
             </select>
-            <Button onClick={() => handleClick("status")} >Change Status</Button>
             </Duo>
+            <Button onClick={() => handleClick()} >Update Product</Button>
           </div>
         </div>
       </div>

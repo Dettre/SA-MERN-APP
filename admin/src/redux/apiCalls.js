@@ -10,12 +10,6 @@ import {
   updateProductFailure,
   updateProductStart,
   updateProductSuccess,
-  updateProductSuccess2,
-  updateProductSuccess3,
-  updateProductSuccess4,
-  updateProductSuccess5,
-  updateProductSuccess6,
-  updateProductSuccess7,
   updateProductSuccess8,
   addProductFailure,
   addProductStart,
@@ -153,35 +147,33 @@ export const updateProduct = async (id, dispatch) => {
   }
 };
 
-export const updatePrd = async (dispatch, id, type, name, desc, price, category, color, size, status) => {
+export const updatePrd = async (dispatch, id, name, desc, price, category, color, size, status) => {
   dispatch(updateProductStart())
   try {
-    if (type === "name") {
-      const res = await publicRequest.put("/auth/updateName", {id: id, name: name});
-      dispatch(updateProductSuccess({id, name}))
-    } else if (type === "desc") {
-      const res = await publicRequest.put("/auth/updateDesc", {id: id, desc: desc});
-      dispatch(updateProductSuccess2({id, desc}))
-    } else if (type === "price") {
-      const res = await publicRequest.put("/auth/updatePrice", {id: id, price: price});
-      dispatch(updateProductSuccess3({id, price}))
-    } else if (type === "category") {
-      const res = await publicRequest.put("/auth/updateCat", {id: id, category: category});
-      dispatch(updateProductSuccess4({id, category}))
-    }  else if (type === "color") {
-      const res = await publicRequest.put("/auth/updateColor", {id: id, color: color});
-      dispatch(updateProductSuccess5({id, color}))
-    }   else if (type === "size") {
-      const res = await publicRequest.put("/auth/updateSize", {id: id, size: size});
-      dispatch(updateProductSuccess6({id, size}))
-    }   else if (type === "status") {
-      let stt = false;
-      if (status.inStock === "true") {
-        stt = true 
-      } else {stt = false}
-      const res = await publicRequest.put("/auth/updateStatus", {id: id, status: stt});
-      dispatch(updateProductSuccess7({id, stt}))
-    }   
+    let stt = false;
+    if (status.inStock === "true") {
+      stt = true 
+    } else {stt = false}
+    const res = await publicRequest.put("/auth/updatePrd", {
+      id: id, 
+      name: name,
+      desc: desc,
+      price: price,
+      category: category,
+      color: color,
+      size: size,
+      status: stt,
+    });
+    dispatch(updateProductSuccess({
+      id, 
+      name,
+      desc,
+      price,
+      category, 
+      color,
+      size,
+      stt
+    }))
   } catch (err) {
     dispatch(updateProductFailure())
   }

@@ -6,7 +6,8 @@ import Footer from "../components/Footer";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router";
 import { useState } from "react";
-import { Search } from "@material-ui/icons";
+import { Refresh, Search } from "@material-ui/icons";
+import CachedIcon from '@mui/icons-material/Cached';
 
 
 const Container = styled.div``;
@@ -22,6 +23,10 @@ const FilterContainer = styled.div`
 
 const Filter = styled.div`
   margin: 20px;
+  display:flex;
+  justify-content: left;
+  align-items: center;
+  cursor: pointer;
   ${mobile({ width: "0px 20px", display: "flex", flexDirection: "column" })}
 `;
 
@@ -68,6 +73,10 @@ const ProductList = () => {
     });
   };
 
+  const ref = () => {
+    window.location.reload(false)
+  }
+
   var [inputText, setInputText] = useState("");
   const InputHandler = (e) => {
     const lowerCase = e.target.value.toLowerCase();
@@ -89,7 +98,7 @@ const ProductList = () => {
         <Filter>
           <FilterText>Filter Products:</FilterText>
           <Select name="color" onChange={handleFilters}>
-            <Option disabled>Color</Option>
+            <Option selected disabled>Color</Option>
             <Option>White</Option>
             <Option>Black</Option>
             <Option>Red</Option>
@@ -103,13 +112,14 @@ const ProductList = () => {
             <Option>Gray</Option>
           </Select>
           <Select name="size" onChange={handleFilters}>
-            <Option disabled>Size</Option>
+            <Option selected disabled>Size</Option>
             <Option>XS</Option>
             <Option>S</Option>
             <Option>M</Option>
             <Option>L</Option>
             <Option>XL</Option>
           </Select>
+          <CachedIcon onClick={()=>ref()}/>
         </Filter>
         <Filter>
           <FilterText>Sort Products:</FilterText>

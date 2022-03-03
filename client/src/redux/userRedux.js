@@ -6,6 +6,7 @@ const userSlice = createSlice({
     currentUser: null,
     isFetching: false,
     error: false,
+    error2: false,
     confirmedPassword: null,
     orders: [],
   },
@@ -30,7 +31,7 @@ const userSlice = createSlice({
     },
     registerFailure: (state) => {
       state.isFetching = false;
-      state.error = true;
+      state.error2 = true;
     },
     newsletterregisterStart: (state) => {
       state.isFetching = true;

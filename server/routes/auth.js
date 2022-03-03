@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
 
     res.status(200).json({...others, accessToken});
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json();
   }
 });
 
@@ -128,103 +128,31 @@ router.put("/updatePassword", async (req, res) => {
   }
 });
 
-// updateName
-router.put("/updateName", async (req, res) => { 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// updatePrd
+router.put("/updatePrd", async (req, res) => { 
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.body.id,
       {
         title: req.body.name,
-      },
-    );
-    console.log(updatedProduct)
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// updateDesc
-router.put("/updateDesc", async (req, res) => { 
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.body.id,
-      {
         desc: req.body.desc,
-      },
-    );
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// updatePrice
-router.put("/updatePrice", async (req, res) => { 
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.body.id,
-      {
         price: req.body.price,
-      },
-    );
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// updateCat
-router.put("/updateCat", async (req, res) => { 
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.body.id,
-      {
         categories: req.body.category,
-      },
-    );
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// updateColor
-router.put("/updateColor", async (req, res) => {
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.body.id,
-      {
         color: req.body.color,
-      },
-    );
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// updateSize
-router.put("/updateSize", async (req, res) => { 
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.body.id,
-      {
         size: req.body.size,
-      },
-    );
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// updateStatus
-router.put("/updateStatus", async (req, res) => { 
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.body.id,
-      {
         inStock: req.body.status,  
       },
     );
@@ -233,6 +161,7 @@ router.put("/updateStatus", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 
 //NEWSLETTER
 router.post("/newsletterregister", async (req, res) => {
