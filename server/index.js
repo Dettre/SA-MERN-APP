@@ -9,12 +9,13 @@ const productRoute = require("./routes/product");
 const orderRoute = require("./routes/order");
 const newsletterRoute = require("./routes/newsletter");
 const stripeRoute = require("./routes/stripe");
+const commentsratingsRoute = require("./routes/commentsratings")
 const cors = require("cors");
 
 
 mongoose
   .connect(process.env.MONGO_URL)
-  .then(() => console.log("DataBase Connected !"))
+  .then(() => console.log("Database Connected !"))
   .catch((err) => {
     console.log(err);
   });
@@ -27,6 +28,7 @@ app.use("/api/products", productRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/mails", newsletterRoute);
 app.use("/api/checkout", stripeRoute);
+app.use("/api/commentsratings", commentsratingsRoute)
 
 
 app.listen(process.env.PORT || 5000, () => {

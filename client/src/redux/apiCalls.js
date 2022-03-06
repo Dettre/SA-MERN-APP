@@ -1,4 +1,6 @@
 import { updateCredentialsStart, updateCredentialsSuccess, updateCredentialsSuccess2, getUserOrdersStart, getUserOrdersSuccess, getUserOrdersFailure, updateCredentialsFailure, loginStart, loginSuccess, loginFailure, registerStart, registerSuccess, registerFailure, newsletterregisterStart,  newsletterregisterSuccess, newsletterregisterFailure, checkCurrentPasswordStart, checkCurrentPasswordSuccess, checkCurrentPasswordFailure} from "./userRedux";
+import { addCommentStart, addCommentSuccess, addCommentFailure, getCommentStart, getCommentSuccess, getCommentFailure, deleteCommentStart, deleteCommentSuccess, deleteCommentFailure, editCommentStart, editCommentSuccess, editCommentFailure, setEditModeStart, setEditModeSuccess, setEditModeFailure } from "./commentsratingsRedux";
+
 import { publicRequest } from "../requestMethods";
 const CryptoJS = require("crypto-js");
 
@@ -40,6 +42,65 @@ export const register = async (dispatch, user) => {
     dispatch(registerFailure());
   }
 };
+
+export const addComment = async (dispatch, username, id, rating, text) => {
+  dispatch(addCommentStart());
+  try {
+    const res = await publicRequest.post("/commentsratings/addcommentrating", {
+      username: username, 
+      id: id, 
+      rating: rating, 
+      text: text
+    });
+    dispatch(addCommentSuccess(res.data));
+  } catch (err) {
+    dispatch(addCommentFailure());
+  }
+};
+
+export const deleteComment = async (dispatch, commentid) => {
+  dispatch(deleteCommentStart());
+  try {
+    const res = await publicRequest.delete(`/commentsratings/deletecommentrating/${commentid}`);
+    dispatch(deleteCommentSuccess(commentid));
+  } catch (err) {
+    dispatch(deleteCommentFailure());
+  }
+};
+
+
+export const getCommentsratings = async (dispatch, id) => {
+  dispatch(getCommentStart());
+  try {
+    const res = await publicRequest.get(`/commentsratings/find/${id}`);
+    dispatch(getCommentSuccess(res.data));
+  } catch (err) {
+    dispatch(getCommentFailure());
+  }
+};
+
+export const updateComment = async (dispatch, commentid, text, rating) => {
+  dispatch(editCommentStart());
+  try {
+    const res = await publicRequest.put(`/commentsratings/editcommentrating/${commentid}`, {
+      text: text,
+      rating: rating
+    });
+    dispatch(editCommentSuccess({commentid, text, rating}));
+  } catch (err) {
+    dispatch(editCommentFailure());
+  }
+};
+
+export const setEditMode = async (dispatch) => {
+  dispatch(setEditModeStart());
+  try {
+    dispatch(setEditModeSuccess());
+  } catch (err) {
+    dispatch(setEditModeFailure());
+  }
+};
+
 
 export const updateCredentials = async (dispatch, id, type, username, email, password) => {
   dispatch(updateCredentialsStart())
